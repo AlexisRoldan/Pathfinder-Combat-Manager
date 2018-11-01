@@ -1,0 +1,53 @@
+danger = #a94442
+negroide = #333
+
+body
+	color negroide
+	font-size 16px
+	#app
+		font-family 'Lato', sans-serif;
+		padding 10px
+		h2
+			font-weight 900
+		dl
+			padding 10px 5px
+			border-bottom 2px solid green
+			&.active
+				background-color rgba(0, 200, 0, .20)
+				color darkgreen
+				&.enemy
+					background-color rgba(200, 0, 0, .20)
+					color danger
+					dd
+						color negroide
+			&.enemy
+				border-bottom 2px solid danger
+			dt
+			dd
+				display inline-block
+				padding 0 5px
+			dt
+				font-weight 900
+			dd
+				margin-left 0
+		#initiative
+			position fixed
+			top 200px
+			right 20px
+			border 1px solid #ccc
+			background-color white
+			min-width 170px
+			padding 20px
+			border-radius 10px
+			box-shadow -2px 2px 2px rgba(0, 0, 0, .25)
+			ol
+				padding-left 20px
+				li.active
+					font-weight 900
+					color green
+		#next_round
+			position fixed
+			bottom 20px
+			right 20px
+		input[type="number"]
+			max-width 75px

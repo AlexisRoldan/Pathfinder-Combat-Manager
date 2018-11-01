@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Awesome Pathfinder Combat Manager</title>
+	<link href="https://fonts.googleapis.com/css?family=Lato:400,900" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="styles.css">
+	<link rel="stylesheet" type="text/css" href="bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="bootstrap-theme.min.css">
+	<script src="vue.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+
+	<div id="app" class="container-fluid">
+		<h1>{{ title }}</h1>
+
+		<h3>Add Characters</h3>
+		<dl class="col-sm-12">
+			<dt>Name</dt>
+			<dd><input type="text" class="form-control" id="charName"></dd>
+			<dt>Max HP</dt>
+			<dd><input type="number" class="form-control" id="charMaxHp" v-on:keyup.enter="addChar"></dd>
+			<dt>Mythic Points</dt>
+			<dd><input type="number" class="form-control" id="myth" v-on:keyup.enter="addChar"></dd>
+			<input type="checkbox" id="foe" name="foe"> <label for="foe">Enemy</label>
+			<button type="button" v-on:click="addChar" class="btn btn-success">Agregar Personaje</button>
+		</dl>
+		
+		<div v-if="chars.length > 0">
+			<h2 class="text-success">Characters</h2>
+			<dl v-for="(char, index) in chars" v-bind:class="{ active: char.currentTurn }" class="card" v-if="!char.isEnemy">
+				<div>
+					<dt>Char Name:</dt>
+					<dd>{{ char.name }}</dd>
+				</div>
+				<div>
+					<dt>Current HP:</dt>
+					<dd><span v-bind:class="[char.currentHp < char.maxHp ? 'text-danger' : 'text-success']">{{ char.currentHp }}</span> / {{ char.maxHp }}</dd>
+				</div>
+
+				<dt>Initiative</dt>
+				<dd><input type="number" class="form-control" :name="char.name" :index="index" v-on:keyup.enter="setInitiative"></dd>
+
+				<dt>HP Change:</dt>
+				<dd><input type="number" class="form-control" :name="index" v-on:keyup.enter="changeHP"></dd>
+
+				<dt>Mythic Points</dt>
+				<dd>{{ char.mythicPoints }}</dd>
+				<button type="button" class="btn btn-danger" :init="index" v-on:click="decreaseMP">-1MP</button>
+
+				<input type="checkbox" :id="char.name+index" :name="index" @click="setCurrentTurn()" v-bind:checked="char.currentTurn"> <label :for="char.name+index">Current Turn</label>
+
+				<div>
+					<h4>Countdowns</h4>
+					<dt>Description</dt>
+					<dd><input type="text" class="form-control" :id="'countDes-'+index"></dd>
+					<dt>Countdown (rounds)</dt>
+					<dd><input type="number" class="form-control" :id="'countNum-'+index"></dd>
+					<button type="button" :name="index" class="btn btn-info" v-on:click="addCountdown">Add Countdown</button>
+					<div :id="'countdown-'+index" v-for="(countdown, index) in char.countdown">
+						<dt>{{ countdown.description }}:</dt>
+						<dd>{{ countdown.rounds }}</dd>
+					</div>
+				</div>
+			</dl>
+		</div>
+
+		<div v-if="chars.length > 0">
+			<h2 class="text-danger">Enemies</h2>
+			<dl v-for="(enemy, index) in chars" v-bind:class="{active: enemy.currentTurn }" class="card enemy" v-if="enemy.isEnemy">
+				<div>
+					<dt>Enemy Name:</dt>
+					<dd>{{ enemy.name }}</dd>
+				</div>
+				<div>
+					<dt>Current HP:</dt>
+					<dd><span v-bind:class="[enemy.currentHp < enemy.maxHp ? 'text-danger' : 'text-success']">{{ enemy.currentHp }}</span> / {{ enemy.maxHp }}</dd>
+				</div>
+
+				<dt>Initiative</dt>
+				<dd><input type="number" class="form-control" :name="enemy.name" :index="index" v-on:keyup.enter="setInitiative"></dd>
+
+				<dt>HP Change:</dt>
+				<dd><input type="number" class="form-control" :name="index" v-on:keyup.enter="changeHP"></dd>
+
+				<dt>Mythic Points</dt>
+				<dd>{{ enemy.mythicPoints }}</dd>
+				<button type="button" class="btn btn-danger" :init="index" v-on:click="decreaseMP">-1MP</button>
+
+				<input type="checkbox" :id="enemy.name+index" :name="index" @click="setCurrentTurn()" v-bind:checked="enemy.currentTurn"> <label :for="enemy.name+index">Current Turn</label>
+
+				<div>
+					<h4>Countdowns</h4>
+					<dt>Description</dt>
+					<dd><input type="text" class="form-control" :id="'countDes-'+index"></dd>
+					<dt>Countdown (rounds)</dt>
+					<dd><input type="number" class="form-control" :id="'countNum-'+index"></dd>
+					<button type="button" :name="index" class="btn btn-info" v-on:click="addCountdown">Add Countdown</button>
+					<div :id="'countdown-'+index" v-for="(countdown, index) in enemy.countdown">
+						<dt>{{ countdown.description }}:</dt>
+						<dd>{{ countdown.rounds }}</dd>
+					</div>
+				</div>
+			</dl>
+		</div>
+		
+		<div id="initiative" v-if="chars.length > 0">
+			<h2>Round: {{ currentRound }}</h2>
+			<ol>
+				<li v-for="(char, index) in chars" v-bind:class="{active: char.currentTurn}">
+					{{ char.name }} ({{ char.initiative }})
+				</li>
+			</ol>	
+				<button type="button" v-on:click="nextTurn" class="btn  btn-info" id="next_turn">Next Turn</button>
+		</div>
+
+	</div>
+
+	<script src="main.js" type="text/javascript" charset="utf-8"></script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+body {
+  color: #333;
+  font-size: 16px;
+}
+body #app {
+  font-family: 'Lato', sans-serif;
+  padding: 10px;
+}
+body #app h2 {
+  font-weight: 900;
+}
+body #app dl {
+  padding: 10px 5px;
+  border-bottom: 2px solid #008000;
+}
+body #app dl.active {
+  background-color: rgba(0,200,0,0.2);
+  color: #006400;
+}
+body #app dl.active.enemy {
+  background-color: rgba(200,0,0,0.2);
+  color: #a94442;
+}
+body #app dl.active.enemy dd {
+  color: #333;
+}
+body #app dl.enemy {
+  border-bottom: 2px solid #a94442;
+}
+body #app dl dt,
+body #app dl dd {
+  display: inline-block;
+  padding: 0 5px;
+}
+body #app dl dt {
+  font-weight: 900;
+}
+body #app dl dd {
+  margin-left: 0;
+}
+body #app #initiative {
+  position: fixed;
+  top: 200px;
+  right: 20px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  min-width: 170px;
+  padding: 20px;
+  border-radius: 10px;
+  -webkit-box-shadow: -2px 2px 2px rgba(0,0,0,0.25);
+          box-shadow: -2px 2px 2px rgba(0,0,0,0.25);
+}
+body #app #initiative ol {
+  padding-left: 20px;
+}
+body #app #initiative ol li.active {
+  font-weight: 900;
+  color: #008000;
+}
+body #app #next_round {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+}
+body #app input[type="number"] {
+  max-width: 75px;
+}
