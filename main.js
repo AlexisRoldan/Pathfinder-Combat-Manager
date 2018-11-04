@@ -2,6 +2,10 @@ var app = new Vue({
 	el: "#app",
 	data: {
 		title: "Awesome Pathfinder Combat Manager",
+		currentName: "",
+		currentMaxHp: "",
+		currentMythic: "",
+		isFoe: false,
 		chars: [
 			// {
 			// 	name: "Arles",
@@ -36,25 +40,28 @@ var app = new Vue({
 		],
 		currentRound: 0
 	},
+	computed:{
+
+	},
 	methods:{
 		addChar: function () {
-			charName = document.getElementById("charName").value
-			charMaxHp = document.getElementById("charMaxHp").value
-			isEnemy = document.getElementById("foe").checked
-			mythicPoints = document.getElementById("myth").value
 			charData =  {
-										name: charName,
-										maxHp: charMaxHp,
-										currentHp: charMaxHp,
-										initiative: "?",
+										name: this.currentName,
+										maxHp: this.currentMaxHp,
+										currentHp: this.currentMaxHp,
+										initiative: "0",
 										currentTurn: false,
-										isEnemy: isEnemy,
-										mythicPoints: mythicPoints
+										isEnemy: this.isFoe,
+										mythicPoints: this.currentMythic,
+										countdown: []
 									}
 			this.chars.push(charData)
-			document.getElementById("charName").value = ""
-			document.getElementById("charMaxHp").value = ""
 
+			//Cleanup
+			this.currentName = ""
+			this.currentMaxHp = ""
+			this.isFoe = false
+			this.currentMythic = ""
 			this.sortInitiative()
 		},
 		changeHP: function () {
@@ -133,7 +140,8 @@ var app = new Vue({
 										description: desc,
 										rounds: num
 									}
-			
+			console.log(index)
+			console.log(this.chars)
 			this.chars[index].countdown.push(countdownData)
 			document.getElementById("countDes-"+index).value = ""
 			document.getElementById("countNum-"+index).value = ""
