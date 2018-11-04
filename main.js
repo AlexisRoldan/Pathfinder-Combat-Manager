@@ -5,7 +5,10 @@ var app = new Vue({
 		currentName: "",
 		currentMaxHp: "",
 		currentMythic: "",
+		currentData: "",
+		currentCount: "",
 		isFoe: false,
+		charExists: false,
 		chars: [
 			// {
 			// 	name: "Arles",
@@ -45,17 +48,21 @@ var app = new Vue({
 	},
 	methods:{
 		addChar: function () {
-			charData =  {
-										name: this.currentName,
-										maxHp: this.currentMaxHp,
-										currentHp: this.currentMaxHp,
-										initiative: "0",
-										currentTurn: false,
-										isEnemy: this.isFoe,
-										mythicPoints: this.currentMythic,
-										countdown: []
-									}
-			this.chars.push(charData)
+			for (var i = 0; i < this.chars.length; i++) {
+				if (this.chars[i].name == this.currentName) {
+					this.charExists = true
+					if (this.currentMaxHp.length > 0) {
+						this.chars[i].maxHp = this.currentMaxHp
+					}
+					if (this.currentMythic.length > 0) {
+						this.chars[i].mythicPoints = this.currentMythic
+					}
+					break
+				}
+			}
+			if (!this.charExists) {
+				this.addNewChar()
+			}
 
 			//Cleanup
 			this.currentName = ""
@@ -63,6 +70,20 @@ var app = new Vue({
 			this.isFoe = false
 			this.currentMythic = ""
 			this.sortInitiative()
+			this.charExists = false
+		},
+		addNewChar: function () {
+			charData =  {
+									name: this.currentName,
+									maxHp: this.currentMaxHp,
+									currentHp: this.currentMaxHp,
+									initiative: "0",
+									currentTurn: false,
+									isEnemy: this.isFoe,
+									mythicPoints: this.currentMythic,
+									countdown: []
+								}
+		this.chars.push(charData)
 		},
 		changeHP: function () {
 			hpChange = event.target.value
@@ -134,17 +155,25 @@ var app = new Vue({
 		},
 		addCountdown: function () {
 			index = event.target.attributes.name.value
-			desc = document.getElementById("countDes-"+index).value
-			num = document.getElementById("countNum-"+index).value
 			countdownData =  {
-										description: desc,
-										rounds: num
+										description: this.currentData,
+										rounds: this.currentCount
 									}
-			console.log(index)
-			console.log(this.chars)
 			this.chars[index].countdown.push(countdownData)
-			document.getElementById("countDes-"+index).value = ""
-			document.getElementById("countNum-"+index).value = ""
+			this.currentData = ""
+			this.currentCount = ""
+		},
+		borrarChar: function() {
+			index = event.target.attributes.index.value
+			this.chars.splice(index, 1)
+		},
+		saveChars: function () {
+			friends = this.chars.filter( char => char['isEnemy'] === false )
+			localStorage.setItem("chars", JSON.stringify(friends))
+		},
+		loadChars: function () {
+			loadedChars = JSON.parse(localStorage.getItem("chars"))
+			this.chars= loadedChars
 		}
 	},
 	created: function () {

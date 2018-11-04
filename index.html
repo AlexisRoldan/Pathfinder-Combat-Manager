@@ -24,7 +24,7 @@
 			<dd><input type="number" class="form-control" v-model="currentMaxHp" v-on:keyup.enter="addChar"></dd>
 			<dt>Mythic Points</dt>
 			<dd><input type="number" class="form-control" v-model="currentMythic" v-on:keyup.enter="addChar"></dd>
-			<input type="checkbox" v-model="isFoe" name="foe"> <label for="foe">Enemy</label>
+			<input type="checkbox" v-model="isFoe" id="foe"> <label for="foe">Enemy</label>
 			<button type="button" @click="addChar" class="btn btn-success">Agregar Personaje</button>
 		</dl>
 		
@@ -41,7 +41,7 @@
 				</div>
 
 				<dt>Initiative</dt>
-				<dd><input type="number" class="form-control" :name="char.name" :index="index" v-on:keyup.enter="setInitiative" v-model="char.initiative"></dd>
+				<dd><input type="number" class="form-control" :name="char.name" :index="index" v-on:change="setInitiative" v-model="char.initiative"></dd>
 
 				<dt>HP Change:</dt>
 				<dd><input type="number" class="form-control" :name="index" v-on:keyup.enter="changeHP"></dd>
@@ -55,15 +55,16 @@
 				<div>
 					<h4>Countdowns</h4>
 					<dt>Description</dt>
-					<dd><input type="text" class="form-control" :id="'countDes-'+index"></dd>
+					<dd><input type="text" class="form-control" v-model="currentData"></dd>
 					<dt>Countdown (rounds)</dt>
-					<dd><input type="number" class="form-control" :id="'countNum-'+index"></dd>
+					<dd><input type="number" class="form-control" v-model="currentCount"></dd>
 					<button type="button" :name="index" class="btn btn-info" @click="addCountdown">Add Countdown</button>
 					<div :id="'countdown-'+index" v-for="(countdown, index) in char.countdown">
 						<dt>{{ countdown.description }}:</dt>
 						<dd>{{ countdown.rounds }}</dd>
 					</div>
 				</div>
+				<button type="button" class="btn btn-danger" @click="borrarChar" :index="index">BORRAR</button>
 			</dl>
 		</div>
 
@@ -80,7 +81,7 @@
 				</div>
 
 				<dt>Initiative</dt>
-				<dd><input type="number" class="form-control" :name="enemy.name" :index="index" v-on:keyup.enter="setInitiative"></dd>
+				<dd><input type="number" class="form-control" :name="enemy.name" :index="index" v-on:change="setInitiative" v-model="enemy.initiative"></dd>
 
 				<dt>HP Change:</dt>
 				<dd><input type="number" class="form-control" :name="index" v-on:keyup.enter="changeHP"></dd>
@@ -94,9 +95,9 @@
 				<div>
 					<h4>Countdowns</h4>
 					<dt>Description</dt>
-					<dd><input type="text" class="form-control" :id="'countDes-'+index"></dd>
+					<dd><input type="text" class="form-control" v-model="currentData"></dd>
 					<dt>Countdown (rounds)</dt>
-					<dd><input type="number" class="form-control" :id="'countNum-'+index"></dd>
+					<dd><input type="number" class="form-control" v-model="currentCount"></dd>
 					<button type="button" :name="index" class="btn btn-info" @click="addCountdown">Add Countdown</button>
 					<div :id="'countdown-'+index" v-for="(countdown, index) in enemy.countdown">
 						<dt>{{ countdown.description }}:</dt>
@@ -104,6 +105,11 @@
 					</div>
 				</div>
 			</dl>
+		</div>
+
+		<div id="save_load">
+			<button type="button" class="btn btn-info" @click="saveChars">GUARDAR CHARS</button>
+			<button type="button" class="btn btn-warning" @click="loadChars">CARGAR CHARS</button>
 		</div>
 		
 		<div id="initiative" v-if="chars.length > 0">
