@@ -18,7 +18,8 @@ var app = new Vue({
 				currentTurn: false,
 				isEnemy: false,
 				mythicPoints: 3,
-				countdown: []
+				countdown: [],
+				healthPercent: "100%"
 			}
 			// {
 			// 	name: "Garruk",
@@ -44,17 +45,8 @@ var app = new Vue({
 		currentRound: 0
 	},
 	computed:{
-		healthBarStyle: function () {
-			if (this.chars[0].currentHp <= 0) {
-				return {
-					width: '0%'
-				}
-			}else {
-				return {
-					width: (this.chars[0].currentHp * 100 / this.chars[0].maxHp) + '%'
-				} 
-			}
-		}
+	},
+	watch:{
 	},
 	methods:{
 		addChar: function () {
@@ -91,18 +83,23 @@ var app = new Vue({
 									currentTurn: false,
 									isEnemy: this.isFoe,
 									mythicPoints: this.currentMythic,
-									countdown: []
+									countdown: [],
+									healthPercent: "100%"
 								}
 		this.chars.push(charData)
 		},
 		changeHP: function () {
 			hpChange = event.target.value
 			if (hpChange.length > 0) {
-				currentHp = this.chars[event.target.name].currentHp
+				index = event.target.name
+				currentChar = this.chars[index]
+				currentHp = currentChar.currentHp
 
-				this.chars[event.target.name].currentHp = parseInt(currentHp) + parseInt(hpChange)
+				currentChar.currentHp = parseInt(currentHp) + parseInt(hpChange)
 
 				event.target.value = ""
+
+				currentChar.healthPercent = (currentChar.currentHp * 100 / currentChar.maxHp) + "%"
 			}
 		},
 		setInitiative: function (event) {
