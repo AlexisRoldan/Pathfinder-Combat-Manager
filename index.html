@@ -36,6 +36,12 @@
 					<dd>{{ char.name }}</dd>
 				</div>
 				<div>
+					<div class="max_hp">
+						<div
+							class="healthbar"
+							:style="healthBarStyle">
+						</div>
+					</div>
 					<dt>Current HP:</dt>
 					<dd><span v-bind:class="[char.currentHp < char.maxHp ? 'text-danger' : 'text-success']">{{ char.currentHp }}</span> / {{ char.maxHp }}</dd>
 				</div>

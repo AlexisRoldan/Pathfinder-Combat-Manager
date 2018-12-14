@@ -10,16 +10,16 @@ var app = new Vue({
 		isFoe: false,
 		charExists: false,
 		chars: [
-			// {
-			// 	name: "Arles",
-			// 	maxHp: "150",
-			// 	currentHp: "150",
-			// 	initiative: 80,
-			// 	currentTurn: false,
-			// 	isEnemy: false,
-			// 	mythicPoints: 3,
-			// 	countdown: []
-			// },
+			{
+				name: "Arles",
+				maxHp: "150",
+				currentHp: "150",
+				initiative: 80,
+				currentTurn: false,
+				isEnemy: false,
+				mythicPoints: 3,
+				countdown: []
+			}
 			// {
 			// 	name: "Garruk",
 			// 	maxHp: "120",
@@ -44,7 +44,17 @@ var app = new Vue({
 		currentRound: 0
 	},
 	computed:{
-
+		healthBarStyle: function () {
+			if (this.chars[0].currentHp <= 0) {
+				return {
+					width: '0%'
+				}
+			}else {
+				return {
+					width: (this.chars[0].currentHp * 100 / this.chars[0].maxHp) + '%'
+				} 
+			}
+		}
 	},
 	methods:{
 		addChar: function () {
